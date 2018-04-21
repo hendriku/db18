@@ -7,6 +7,7 @@ anwenden.*/
 -- Add constraints
 -- generate random content in insert sql
 
+-- Eine Tabelle, die den Zuegen ihren Typ zuordnet
 CREATE TABLE ZUG(
     ZUG_ID NUMBER NOT NULL,
     ZUG_TYP VARCHAR2(8) NOT NULL,
@@ -18,6 +19,7 @@ COMMENT ON TABLE ZUG IS 'Eine Tabelle mit allen Zuegen';
 COMMENT ON COLUMN ZUG.ZUG_ID IS 'eine Nummer, die einen physischen Zug eindeutig identifiziert';
 COMMENT ON COLUMN ZUG.ZUG_TYP IS 'der Typ des Zugs, z.B. ICE, IC oder SBAHN';
 
+-- Eine Tabelle, die Mitfahrer einer Verbindung zuordnet
 CREATE TABLE MITFAHRER(
     VERBINDUNGS_ID NUMBER NOT NULL,
     MITARBEITER_ID NUMBER NOT NULL,
@@ -30,6 +32,7 @@ COMMENT ON TABLE MITFAHRER IS 'Eine Tabelle, in der die Mitarbeiter Verbindungen
 COMMENT ON COLUMN MITFAHRER.VERBINDUNGS_ID IS 'die Idenfikationsnummer einer Verbindung, in der der unter MITARBEITER_ID definierte Mitarbeiter mitfaehrt.';
 COMMENT ON COLUMN MITFAHRER.MITARBEITER_ID IS 'die Identifikationsnummer des Mitarbeiters, der in der unter VERBINDUNGS_ID definierten Verbindung mitfaehrt.';
 
+-- Eine Tabelle, die Haltestellen einen Namen und die Eigenschaft BARRIEREFREIHET zuordnet
 CREATE TABLE HALTESTELLE(
     HALTESTELLEN_ID NUMBER NOT NULL,
     HALTESTELLEN_NAME VARCHAR2(144) NOT NULL,
@@ -43,7 +46,13 @@ COMMENT ON COLUMN HALTESTELLE.HALTESTELLEN_ID IS 'eine Nummer, die eine Halteste
 COMMENT ON COLUMN HALTESTELLE.HALTESTELLEN_NAME IS 'der Name der Haltestelle (muss nicht eindeutig sein)';
 COMMENT ON COLUMN HALTESTELLE.BARRIEREFREI IS 'J oder N, gibt an ob eine Haltestelle barrierefrei ist';
 
-
+/*  
+    Eine Tabelle, die alle Strecken enthaelt.
+    Eine Strecke wird durch die STRECKEN_ID identifiziert. Sie enthaelt mehrere Haltestellen, denen ihre Position auf der Strecke zugeordnet ist.
+    0 ist dabei dem Starthalt, die hoechste Zahl dem Endhalt zugeordnet.
+    Die STRECKEN_ID liefert alle Eintraege von indizierten Haltestellen in der Tabelle zurueck. Einzelne Eintraege erhaelt man durch
+    Angabe von STRECKEN_ID und dem POS_INDEX (Positions-Index).
+*/
 CREATE TABLE STRECKE(
     STRECKEN_ID NUMBER NOT NULL,
     HALTESTELLEN_ID NUMBER NOT NULL,
@@ -53,11 +62,18 @@ CREATE TABLE STRECKE(
         POS_INDEX
     ) ENABLE
 );
-COMMENT ON TABLE STRECKE IS 'Eine Tabelle mit allen Strecken. Eine Strecke hat mehrere Haltestellen, die eine Position auf der Strecke haben. Die STRECKEN_ID liefert alle Eintraege fuer eine eine Strecke, einzelne Eintraege werden mit STRECKEN_ID und POS_INDEX selektiert.';
+COMMENT ON TABLE STRECKE IS 'Eine Tabelle mit allen Strecken. Eine Strecke hat mehrere Haltestellen, die eine Position auf der Strecke haben (0 ist Starthalt, hoechste Zahl Endhalt). Die STRECKEN_ID liefert alle Eintraege fuer eine eine Strecke, einzelne Eintraege werden mit STRECKEN_ID und POS_INDEX selektiert.';
 COMMENT ON COLUMN STRECKE.STRECKEN_ID IS 'eine Nummer, die eine Strecke eindeutig identifiziert, bildet mit POS den Schluessel';
 COMMENT ON COLUMN STRECKE.HALTESTELLEN_ID IS 'die Identifikationsnummer einer Haltestelle, die auf der Strecke liegt';
 COMMENT ON COLUMN STRECKE.POS_INDEX IS 'eine Nummer, die die Position eines Halts auf der Strecke angibt';
 
+/*  
+    Eine Tabelle, die alle Verbindungen enthaelt.
+    Eine Verbindung wird durch die VERBINDUNGS_ID identifiziert. Sie enthaelt mehrere Haltestellen aus der ihr zugeordneten Strecke, denen ihre Position auf der Strecke zugeordnet ist.
+    0 ist dabei dem Starthalt, die hoechste Zahl dem Endhalt zugeordnet. Weitere zugeordnete Informationen sind Ankunfts- und Abfahrtszeit sowie das Gleis, da dieses bei verschiedenen Verbindungen auf der gleichen Strecke variieren koennte.
+    Die VERBINDUNGS_ID liefert alle Eintraege von indizierten Haltestellen in der Tabelle zurueck. Einzelne Eintraege erhaelt man durch
+    Angabe von STRECKEN_ID und dem POS_INDEX (Positions-Index).
+*/
 CREATE TABLE VERBINDUNG(
     VERBINDUNGS_ID NUMBER NOT NULL,
     STRECKEN_ID NUMBER NOT NULL,
@@ -80,7 +96,7 @@ COMMENT ON COLUMN VERBINDUNG.ANKUNFTSZEIT IS 'eine Uhrzeit (DATE), die die Ankun
 COMMENT ON COLUMN VERBINDUNG.ABFAHRTSZEIT IS 'eine Uhrzeit (DATE), die die Abfahrtszeit an einem Halt angibt. Ist NULL fuer den Endbahnhof';
 COMMENT ON COLUMN VERBINDUNG.GLEIS IS 'eine Nummer, die das Gleis angibt, an dem der Zug am Halt haelt';
 
-
+-- Eine Tabelle, die einer MITARBEITER_ID detaillierte Informationen ueber diesen Mitarbeiter zuordnet
 CREATE TABLE MITARBEITER(
     MITARBEITER_ID NUMBER NOT NULL,
     MITARBEITER_TYP VARCHAR2(16) NOT NULL,
@@ -97,7 +113,7 @@ COMMENT ON COLUMN MITARBEITER.MITARBEITER_TYP IS 'Jobbezeichnung des Mitarbeiter
 COMMENT ON COLUMN MITARBEITER.MITARBEITER_VORNAME IS 'Vorname eines Mitarbeiters';
 COMMENT ON COLUMN MITARBEITER.MITARBEITER_NAME IS 'Nachname eines Mitarbeiters';
 
-
+-- Eine Tabelle, die Mitarbeitern Urlaub zuordent. Ein Mitarbeiter kann mehrere Urlaube nehmen
 CREATE TABLE URLAUB(
     MITARBEITER_ID NUMBER NOT NULL,
     URLAUBSANFANG DATE NOT NULL,
