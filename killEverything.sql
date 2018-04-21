@@ -1,3 +1,4 @@
+-- burns everything slow and steady (use it at least 5 times to be sure everything is dead...)
 ALTER TABLE ZUG
 DROP CONSTRAINT ZUG_PK;
 ALTER TABLE ZUG
