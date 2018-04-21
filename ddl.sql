@@ -249,8 +249,24 @@ CREATE TABLE URLAUB(
     URLAUBSENDE DATE NOT NULL
 );
 -- Die MITARBEITER_ID muss in der entsprechenden Tabelle vorhanden sein
+ALTER TABLE URLAUB
+ADD CONSTRAINT URLAUB_FK1 FOREIGN KEY
+(
+    MITARBEITER_ID
+)
+REFERENCES MITARBEITER
+(
+    MITARBEITER_ID
+)
+ENABLE;
 -- Der URLAUBSANFANG muss vor dem URLAUBSENDE sein
+ALTER TABLE URLAUB
+ADD CONSTRAINT URLAUB_CHK1 CHECK 
+(
+    URLAUBSANFANG < URLAUBSENDE
+) ENABLE;
 -- Der Urlaub darf sich mit keiner anderen Urlaubsphase überschneiden 
+-- TODO
 COMMENT ON TABLE URLAUB IS 'Eine Tabelle, die Mitarbeitern Urlaub zuordnet. Ein Mitarbeiter kann mehrere Urlaube nehmen.';
 COMMENT ON COLUMN URLAUB.MITARBEITER_ID IS 'die Identifikationsnummer eines Mitarbeiters';
 COMMENT ON COLUMN URLAUB.URLAUBSANFANG IS 'das Datum, an dem man endlich Urlaub hat';
@@ -288,10 +304,3 @@ COMMENT ON COLUMN ALLE_STOPS_V.IST_START IS 'Zeigt an, ob es sich um den Startba
 COMMENT ON COLUMN ALLE_STOPS_V.IST_ZIEL IS 'Zeigt an, ob es sich um den Endbahnhof einer Verbindung handelt.';
 COMMENT ON COLUMN ALLE_STOPS_V.ANKUNFTSZEIT IS 'Planmaessige Ankunftszeit des Zugs am Stop';
 COMMENT ON COLUMN ALLE_STOPS_V.ABFAHRTSZEIT IS 'Planmaessige Abfahrtszeit des Zugs am Stop';
-
-
-
-
-
-
-
