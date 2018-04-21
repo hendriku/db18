@@ -129,5 +129,42 @@ COMMENT ON COLUMN URLAUB.MITARBEITER_ID IS 'die Identifikationsnummer eines Mita
 COMMENT ON COLUMN URLAUB.URLAUBSANFANG IS 'das Datum, an dem man endlich Urlaub hat';
 COMMENT ON COLUMN URLAUB.URLAUBSENDE IS 'das Datum des letzten Tages vom viel zu kurzen Urlaub';
 
+-- View um alle Stops anzuzeigen
+CREATE VIEW ALLE_STOPS_V (
+    VERBINDUNG,
+    ZUG_TYP,
+    BAHNHOF,
+    IST_START,
+    IST_ZIEL,
+    ANKUNFTSZEIT,
+    ABFAHRTSZEIT
+)
+AS
+    SELECT 
+        V.VERBINDUNGS_ID,
+        Z.ZUG_TYP, 
+        H.HALTESTELLEN_NAME,
+        CASE WHEN V.POS_INDEX = 0 THEN 'JA' ELSE 'NEIN' END,
+        CASE WHEN V.POS_INDEX = MAX(V.POS_INDEX) OVER (PARTITION BY V.VERBINDUNGS_ID) THEN 'JA' ELSE 'NEIN' END,
+        TO_CHAR(V.ANKUNFTSZEIT, 'HH24:MI'),
+        TO_CHAR(V.ABFAHRTSZEIT, 'HH24:MI')
+    FROM VERBINDUNG V 
+    LEFT JOIN ZUG Z ON (V.ZUG_ID = Z.ZUG_ID)
+    LEFT JOIN STRECKE S ON (V.STRECKEN_ID = S.STRECKEN_ID AND V.POS_INDEX = S.POS_INDEX)
+    LEFT JOIN HALTESTELLE H ON (S.HALTESTELLEN_ID = H.HALTESTELLEN_ID)
+;
+COMMENT ON TABLE ALLE_STOPS_V IS 'View um alle Stops anzuzeigen';
+COMMENT ON COLUMN ALLE_STOPS_V.VERBINDUNG IS 'VERBINDUNGS_ID des Stops';
+COMMENT ON COLUMN ALLE_STOPS_V.ZUG_TYP IS 'Typ des Zugs, der die Verbindung faehrt.';
+COMMENT ON COLUMN ALLE_STOPS_V.BAHNHOF IS 'Name des Stops';
+COMMENT ON COLUMN ALLE_STOPS_V.IST_START IS 'Zeigt an, ob es sich um den Startbahnhof einer Verbindung handelt.';
+COMMENT ON COLUMN ALLE_STOPS_V.IST_ZIEL IS 'Zeigt an, ob es sich um den Endbahnhof einer Verbindung handelt.';
+COMMENT ON COLUMN ALLE_STOPS_V.ANKUNFTSZEIT IS 'Planmaessige Ankunftszeit des Zugs am Stop';
+COMMENT ON COLUMN ALLE_STOPS_V.ABFAHRTSZEIT IS 'Planmaessige Abfahrtszeit des Zugs am Stop';
+
+
+
+
+
 
 
