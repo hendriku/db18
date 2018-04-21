@@ -5,6 +5,7 @@ anwenden.*/
 -- Create skeleton (CHECK)
 -- Delete everything again (CHECK)
 -- Add constraints 
+-- Delete everything AGAIN (CHECK)
 -- generate random content in insert sql
 -- show the tables in the requested view (CHECK)
 
@@ -92,7 +93,7 @@ ADD CONSTRAINT STRECKE_CHK1 CHECK
     STRECKEN_ID > 0
 ) ENABLE;
 -- Der POS_INDEX muss eine positive Zahl oder 0 sein. Dabei muss für einen neu eingefügten POS_INDEX > 0 immer ein Vorgänger POS_INDEX-1 existieren.
--- TODO
+-- OPTIONAL TODO
 COMMENT ON TABLE STRECKE IS 'Eine Tabelle mit allen Strecken. Eine Strecke hat mehrere Haltestellen, die eine Position auf der Strecke haben (0 ist Starthalt, hoechste Zahl Endhalt). Die STRECKEN_ID liefert alle Eintraege fuer eine eine Strecke, einzelne Eintraege werden mit STRECKEN_ID und POS_INDEX selektiert.';
 COMMENT ON COLUMN STRECKE.STRECKEN_ID IS 'eine Nummer, die eine Strecke eindeutig identifiziert, bildet mit POS den Schluessel';
 COMMENT ON COLUMN STRECKE.HALTESTELLEN_ID IS 'die Identifikationsnummer einer Haltestelle, die auf der Strecke liegt';
@@ -117,6 +118,7 @@ CREATE TABLE VERBINDUNG(
         VERBINDUNGS_ID
     ) ENABLE
 );
+
 -- Die STRECKEN_ID muss in der entsprechenden Tabelle existieren (In Relation mit POS_INDEX)
 ALTER TABLE VERBINDUNG
 ADD CONSTRAINT VERBINDUNG_FK1 FOREIGN KEY
@@ -158,9 +160,21 @@ ADD CONSTRAINT VERBINDUNG_CHK3 CHECK
     GLEIS > 0
 ) ENABLE;
 -- Ein GLEIS der selben Haltestelle darf zur selben Zeit nicht mehrfach belegt sein
--- TODO
--- Die ZUG_ID darf zur selben Zeit nicht in mehreren Verbindungen auftreten
--- TODO
+-- TODO Berücksichtigen, dass ein Zug auch länger an einer Haltestelle halten kann, sodass z1.ANKUNFTSZEIT < z2.ANKUNFTSZEIT 
+-- aber trotzdem z1.ABFAHRTSZEIT > z2.ANKUNFTSZEIT
+ALTER TABLE VERBINDUNG
+ADD CONSTRAINT VERBINDUNG_CHK4 UNIQUE 
+(
+    GLEIS, ANKUNFTSZEIT
+) ENABLE;
+-- Die ZUG_ID darf zur selben Zeit nicht in mehreren Verbindungen auftreten (den selben Zug gibt es nur ein mal zur Zeit)
+-- TODO Der Zug kann in zwei Einträgen mit nur einer Minute Differenz in der Abfahrt fahren, auch, wenn er lt. dem anderen
+-- Eintrag noch nicht angekommen ist
+ALTER TABLE VERBINDUNG
+ADD CONSTRAINT VERBINDUNG_CHK5 UNIQUE 
+(
+    ZUG_ID, ABFAHRTSZEIT
+) ENABLE;
 COMMENT ON TABLE VERBINDUNG IS 'Eine Tabelle mit allen Verbindungen. Sie ordnet den einzelnen Eintraegen fuer eine Strecke Uhrzeiten und Gleise zu. Eine VERBINDUNGS_ID liefert alle Eintraege zu einer Verbindung, VERBINDUNGS_ID und POS_INDEX einer Haltestelle sind der Primaersschluessel.';
 COMMENT ON COLUMN VERBINDUNG.VERBINDUNGS_ID IS 'eine Nummer, die eine Verbindung eindeutig identifiziert';
 COMMENT ON COLUMN VERBINDUNG.STRECKEN_ID IS 'eine Nummer, die befahrene Strecke eindeutig identifiziert';
@@ -266,7 +280,7 @@ ADD CONSTRAINT URLAUB_CHK1 CHECK
     URLAUBSANFANG < URLAUBSENDE
 ) ENABLE;
 -- Der Urlaub darf sich mit keiner anderen Urlaubsphase überschneiden 
--- TODO
+-- OPTIONAL TODO
 COMMENT ON TABLE URLAUB IS 'Eine Tabelle, die Mitarbeitern Urlaub zuordnet. Ein Mitarbeiter kann mehrere Urlaube nehmen.';
 COMMENT ON COLUMN URLAUB.MITARBEITER_ID IS 'die Identifikationsnummer eines Mitarbeiters';
 COMMENT ON COLUMN URLAUB.URLAUBSANFANG IS 'das Datum, an dem man endlich Urlaub hat';
