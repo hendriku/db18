@@ -161,12 +161,13 @@ ADD CONSTRAINT VERBINDUNG_CHK3 CHECK
 ) ENABLE;
 -- Ein GLEIS der selben Haltestelle darf zur selben Zeit nicht mehrfach belegt sein
 -- TODO Berücksichtigen, dass ein Zug auch länger an einer Haltestelle halten kann, sodass z1.ANKUNFTSZEIT < z2.ANKUNFTSZEIT 
--- aber trotzdem z1.ABFAHRTSZEIT > z2.ANKUNFTSZEIT
-ALTER TABLE VERBINDUNG
+-- aber trotzdem z1.ABFAHRTSZEIT > z2.ANKUNFTSZEIT || UND || Das nur das Gleis von einer Haltestelle gemeint ist (vermutlich nur
+-- durch Funktionen realisierbar)
+/* ALTER TABLE VERBINDUNG
 ADD CONSTRAINT VERBINDUNG_CHK4 UNIQUE 
 (
     GLEIS, ANKUNFTSZEIT
-) ENABLE;
+) ENABLE;*/
 -- Die ZUG_ID darf zur selben Zeit nicht in mehreren Verbindungen auftreten (den selben Zug gibt es nur ein mal zur Zeit)
 -- TODO Der Zug kann in zwei Einträgen mit nur einer Minute Differenz in der Abfahrt fahren, auch, wenn er lt. dem anderen
 -- Eintrag noch nicht angekommen ist
