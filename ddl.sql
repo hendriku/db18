@@ -2,11 +2,13 @@
 nur einen neuen Datenbankbenutzer anlegen und konnten unsere in der Vorlesung bereits unter Beweis gestellten Kenntnisse direkt
 anwenden.*/
 
+-- !!!NUR EINMAL AUSZUFÜHREN!!!
+
 -- Create skeleton (CHECK)
 -- Delete everything again (CHECK)
--- Add constraints 
+-- Add constraints (CHECK)
 -- Delete everything AGAIN (CHECK)
--- generate random content in insert sql
+-- generate random content in insert sql (CHECK)
 -- show the tables in the requested view (CHECK)
 
 -- Eine Tabelle, die den Zuegen ihren Typ zuordnet
@@ -282,6 +284,8 @@ ADD CONSTRAINT URLAUB_CHK1 CHECK
 ) ENABLE;
 -- Der Urlaub darf sich mit keiner anderen Urlaubsphase überschneiden 
 -- OPTIONAL TODO
+-- Ein Mitarbeiter muss mindestens einmal pro Jahr 1 Monat Urlaub nehmen
+-- VERY OPTIONAL TODO
 COMMENT ON TABLE URLAUB IS 'Eine Tabelle, die Mitarbeitern Urlaub zuordnet. Ein Mitarbeiter kann mehrere Urlaube nehmen.';
 COMMENT ON COLUMN URLAUB.MITARBEITER_ID IS 'die Identifikationsnummer eines Mitarbeiters';
 COMMENT ON COLUMN URLAUB.URLAUBSANFANG IS 'das Datum, an dem man endlich Urlaub hat';
