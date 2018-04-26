@@ -1,6 +1,21 @@
 -- Lorem ipsum put some dolor sit random data consectetur over here
 -- Dont show any errors when script gets executed multiple times
 
+-- burns everything slow and steady (use it at least 3 times to be sure everything is dead...)
+DELETE MITFAHRER;
+
+DELETE VERBINDUNG;
+
+DELETE STRECKE;
+
+DELETE ZUG;
+
+DELETE HALTESTELLE;
+
+DELETE URLAUB;
+
+DELETE MITARBEITER;
+
 -- MITARBEITER
 insert into MITARBEITER (MITARBEITER_ID, MITARBEITER_VORNAME, MITARBEITER_NAME, MITARBEITER_TYP, MITARBEITER_EINSTELLDATUM) values (1, 'Allix', 'Tumilson', 'LOKFUEHRER', '21-04-2018');
 insert into MITARBEITER (MITARBEITER_ID, MITARBEITER_VORNAME, MITARBEITER_NAME, MITARBEITER_TYP, MITARBEITER_EINSTELLDATUM) values (2, 'Tootsie', 'Buckleigh', 'KELLNER', '21-04-2018');
@@ -871,5 +886,3 @@ insert into URLAUB (MITARBEITER_ID, URLAUBSANFANG, URLAUBSENDE) values (97, '05-
 insert into URLAUB (MITARBEITER_ID, URLAUBSANFANG, URLAUBSENDE) values (98, '05-05-2018', '06-06-2018');
 insert into URLAUB (MITARBEITER_ID, URLAUBSANFANG, URLAUBSENDE) values (99, '05-05-2018', '06-06-2018');
 insert into URLAUB (MITARBEITER_ID, URLAUBSANFANG, URLAUBSENDE) values (100, '05-05-2018', '06-06-2018');
-
-SELECT * FROM ALLE_STOPS_V;
