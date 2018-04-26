@@ -1,7 +1,5 @@
 -- burns everything slow and steady (use it at least 3 times to be sure everything is dead...)
 ALTER TABLE MITFAHRER
-DROP CONSTRAINT MITFAHRER_FK1;
-ALTER TABLE MITFAHRER
 DROP CONSTRAINT MITFAHRER_FK2;
 DROP TABLE MITFAHRER;
 
