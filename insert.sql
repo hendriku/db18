@@ -1,7 +1,6 @@
--- Lorem ipsum put some dolor sit random data consectetur over here
--- Dont show any errors when script gets executed multiple times
+-- Doesn't show any errors when script gets executed multiple times
+-- Burns everything slow and steady (use it at least 3 times to be sure everything is dead...)
 
--- burns everything slow and steady (use it at least 3 times to be sure everything is dead...)
 DELETE MITFAHRER;
 
 DELETE VERBINDUNG;
