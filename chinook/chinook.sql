@@ -9,7 +9,7 @@ SELECT * FROM ARTIST;
 
 -- Aufgabe 2
 WITH artistsComposers AS (
-    SELECT t.COMPOSER, a.NAME
+    SELECT DISTINCT t.COMPOSER, a.NAME
      FROM TRACK t
     JOIN (SELECT * FROM ALBUM alb JOIN ARTIST art ON art.ARTISTID = alb.ARTISTID) a
         ON a.ALBUMID = t.ALBUMID
